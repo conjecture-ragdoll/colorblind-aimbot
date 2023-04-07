@@ -8,7 +8,7 @@
     ./aimbot.c 50 auto
 
 For manual mode,
-    User may only include a numeric first argument
+    user may only include a numeric first argument
     to set shots per minute.
     User may also include an optional 2nd argument "auto"
     to enable auto-shooting mode.
