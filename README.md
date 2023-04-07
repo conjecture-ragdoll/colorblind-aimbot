@@ -1,6 +1,4 @@
-The colorblind-aimbot is the tool that will make your opponents hate you. It's an aimbot designed as a color-detection tool to target opponents in first person style shooter games. 
-
-Just set instructions via command-line.
+[IP] The colorblind-aimbot is the tool that will make your opponents hate you. It's an aimbot designed as a color-detection tool to target opponents in first person style shooter games. Just set instructions via command-line.
 
 ![](aimbot/compiling_instructions.png)
    
