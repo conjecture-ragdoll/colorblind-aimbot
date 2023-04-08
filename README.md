@@ -1,30 +1,13 @@
 
-The tool that will make your opponents hate you.
+The tool that will make your opponents hate you. It's an aimbot designed as a color-detection tool to help target opponents in first person style shooter games. 
 
+Users can set instructions via command-line 
 
+![](compiling_instructions.png)
 
-Description:
-    An aimbot designed as a color-detection 
-    tool to target opponents in first person
-    style shooter games. 
+    gcc aimbot.c -o aimbot.exe
+    ./aimbot 50 
 
-    Users can set instructions via command-line 
+For manual mode, user may only include a numeric first argument to set shots per minute. User may also include an optional 2nd argument "auto" to enable auto-shooting mode.
 
-    (Also See Source Code Compiling Instructions)
-
-
-Disclaimer:
-    Intended for demonstration purposes only.
-    Cheating in games is morally corrupt.
-
-Source Code Compiling Instructions:
-
-
-    ![](aimbot/compiling_instructions.png)
-
-    For manual mode:
-    User may only include a numeric first argument
-    to set shots per minute.
-
-    User may also include an optional 2nd argument "auto"
-    to enable auto-shooting mode.
+Disclaimer: Intended for demonstration purposes only. Cheating in games is morally corrupt.

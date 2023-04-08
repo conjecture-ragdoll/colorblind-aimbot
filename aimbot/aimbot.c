@@ -38,6 +38,11 @@ unsigned char *opponent_color;
         *auto_mode = 1;
     }
 
+    void toggle_state(int *state) {
+        *state = abs(*state - 1);
+    }
+
+/*
     void toggle_auto_shooting() {       // Toggled via hot-key shortcut
         *auto_mode = abs(*auto_mode - 1);
     }
@@ -45,6 +50,7 @@ unsigned char *opponent_color;
     void toggle_aimbot() {      // Toggled via hot-key shortcut
         *is_running = abs(*is_running - 1);
     }
+*/
 
 int main(int argc, char *argv[]) {
 
@@ -63,6 +69,11 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    
+
+    free(is_running);
+    free(auto_mode);
+    free(shooting_frequency);
 
     return 0;
 }
