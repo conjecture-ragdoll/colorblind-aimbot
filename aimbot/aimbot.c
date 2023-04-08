@@ -1,5 +1,7 @@
 /*
 
+gcc aimbot.c -o aimbot.exe
+
 Have fun!
 (Currently in progress)
 
@@ -11,11 +13,10 @@ By Flora Afroza
 #include <stdlib.h>
 #include <curses.h>
 
-int *auto_mode;    // Auto-shooting mode
-int *is_running;
 
+int *is_running, *auto_mode, *shooting_frequency;
 unsigned char *opponent_color;
-double *shooting_frequency;
+
 
     void select_opponent_color() {
 
@@ -29,7 +30,7 @@ double *shooting_frequency;
         *shooting_frequency = shots_per_minute;
     }
 
-    void target_opponent() {
+    void target_opponent() {       // cursor functions here
 
     }
 
@@ -38,16 +39,21 @@ double *shooting_frequency;
     }
 
     void toggle_auto_shooting() {       // Toggled via hot-key shortcut
-        *auto_mode = abs(*auto_mode - (-1));
+        *auto_mode = abs(*auto_mode - 1);
+    }
+
+    void toggle_aimbot() {      // Toggled via hot-key shortcut
+        *is_running = abs(*is_running - 1);
     }
 
 int main(int argc, char *argv[]) {
 
     auto_mode = malloc(sizeof(int));
     *auto_mode = 0;
+    is_running = malloc(sizeof(int));
 
-    shooting_frequency = malloc(sizeof(double));
-    *shooting_frequency = 50; // default
+    shooting_frequency = malloc(sizeof(int));
+    *shooting_frequency = 50;   // default
 
     if(argc > 0) {
         set_shooting_frequency(atoi(argv[0]));
