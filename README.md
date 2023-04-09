@@ -4,6 +4,7 @@ The tool that will make your opponents hate you. It's an aimbot designed as a co
 ![](compiling_instructions.png)
 
 Compiling Example:
+
     gcc aimbot.c -o aimbot.exe
     ./aimbot 50 
 
