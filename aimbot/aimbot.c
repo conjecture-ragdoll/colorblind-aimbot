@@ -1,6 +1,6 @@
 /*
 
-gcc aimbot.c -o aimbot.exe
+gcc aimbot.c -o aimbot.exe -lSDL2
 
 Have fun!
 (Currently in progress)
@@ -9,20 +9,17 @@ By Flora Afroza
 
 */
 
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <curses.h>
+
 
 
 int *is_running, *auto_shooting_frequency;
-unsigned char *opponent_color;
+Uint32 *opponent_color;
 
 
-    void select_opponent_color() {
-
-    }
-
-    void set_opponent_color(unsigned char pixel_color) {  // After player selects colorblind mode
+    void set_opponent_color() {  // After player selects colorblind mode
         *opponent_color = pixel_color;
     }
 
@@ -41,8 +38,15 @@ unsigned char *opponent_color;
 
 int main(int argc, char *argv[]) {
 
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("SDL Error: %s\n", SDL_GetError());
+        return 1;
+    }
+
     is_running = malloc(sizeof(int));
     *is_running = 1;
+
+    opponent_color = malloc(sizeof(Uint32));
 
     auto_shooting_frequency = malloc(sizeof(int));
     *auto_shooting_frequency = 0;   // 0 means manual mode
@@ -51,6 +55,8 @@ int main(int argc, char *argv[]) {
         set_shooting_frequency(atoi(argv[0]));
     }
     
+
+    printf("test\n");
 
     free(is_running);
     free(auto_shooting_frequency);
