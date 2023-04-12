@@ -6,7 +6,7 @@ The tool that will make your opponents hate you. It's an aimbot designed as a co
 
 Compiling Example:
 
-    gcc aimbot.c -o aimbot.exe
+    gcc aimbot.c -o aimbot.exe -lSDL2
     ./aimbot 50 
 
 For auto-shooting mode, user may specify an argument to specify shots per minute. Otherwise, user enters manual-mode by default.
