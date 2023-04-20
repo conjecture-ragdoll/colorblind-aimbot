@@ -15,12 +15,42 @@ By Flora Afroza
 
 
 
-int *is_running, *auto_shooting_frequency;
-// Uint32 *opponent_color;
+int *is_running, *auto_shooting_frequency;	// Use in toggle_state() function
 
 
-    void set_opponent_color() {  // After player selects colorblind mode
-        *opponent_color = pixel_color;
+    void grab_opponent_color() {
+
+    }
+
+    void set_opponent_color() {  	// User must make sure colorblind mode is enabled
+   	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        	printf("SDL Error: %s\n", SDL_GetError());
+        	return;
+        }
+
+	    SDL_DisplayMode screen;
+	    if (SDL_GetCurrentDisplayMode(0, &screen) != 0) {
+		printf("Could not get display mode! SDL_Error: %s\n", SDL_GetError());
+		return;
+	    }
+
+    	SDL_Window* window = SDL_CreateWindow(
+				    "_Set Opponent Color Target_", 
+				    SDL_WINDOWPOS_CENTERED, 
+				    SDL_WINDOWPOS_CENTERED, 
+				    screen.w, 
+				    screen.h, 
+				    SDL_WINDOW_SHOWN);
+
+    	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+
+	size_t computer_bits = 8 * sizeof(void*);	// ??? check VM 
+
+	SDL_Surface* screenshot = SDL_CreateRGBSurfaceWithFormat(0, screen.w, screen.h, computer_bits, SDL_PIXELFORMAT_RGBA32);
+    	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGBA32, screenshot->pixels, screenshot->pitch);
+	
+
+
     }
 
     void set_shooting_frequency(double shots_per_minute) {
@@ -38,28 +68,11 @@ int *is_running, *auto_shooting_frequency;
 
 int main(int argc, char *argv[]) {
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        printf("SDL Error: %s\n", SDL_GetError());
-        return 1;
-    }
-
-
-    SDL_Window* window = SDL_CreateWindow(
-		    "SDL2 Screen Pixel Color Test", 
-		    SDL_WINDOWPOS_CENTERED, 
-		    SDL_WINDOWPOS_CENTERED, 
-		    640, 
-		    480, 
-		    SDL_WINDOW_SHOWN);
-
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
     
-
     is_running = malloc(sizeof(int));
     *is_running = 1;
 
-    opponent_color = malloc(sizeof(Uint32));
 
     auto_shooting_frequency = malloc(sizeof(int));
     *auto_shooting_frequency = 0;   // 0 means manual mode
