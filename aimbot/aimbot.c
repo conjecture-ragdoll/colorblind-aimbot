@@ -16,7 +16,7 @@ By Flora Afroza
 
 
 int *is_running, *auto_shooting_frequency;
-Uint32 *opponent_color;
+// Uint32 *opponent_color;
 
 
     void set_opponent_color() {  // After player selects colorblind mode
@@ -42,6 +42,19 @@ int main(int argc, char *argv[]) {
         printf("SDL Error: %s\n", SDL_GetError());
         return 1;
     }
+
+
+    SDL_Window* window = SDL_CreateWindow(
+		    "SDL2 Screen Pixel Color Test", 
+		    SDL_WINDOWPOS_CENTERED, 
+		    SDL_WINDOWPOS_CENTERED, 
+		    640, 
+		    480, 
+		    SDL_WINDOW_SHOWN);
+
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+
+    
 
     is_running = malloc(sizeof(int));
     *is_running = 1;
