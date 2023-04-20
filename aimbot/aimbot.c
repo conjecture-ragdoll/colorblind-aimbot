@@ -44,11 +44,12 @@ int *is_running, *auto_shooting_frequency;	// Use in toggle_state() function
 
     	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	size_t computer_bits = 8 * sizeof(void*);	// ??? check VM 
+	size_t computer_bits = 8 * sizeof(void*);	// ??? check VM
 
 	SDL_Surface* screenshot = SDL_CreateRGBSurfaceWithFormat(0, screen.w, screen.h, computer_bits, SDL_PIXELFORMAT_RGBA32);
     	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGBA32, screenshot->pixels, screenshot->pitch);
-	
+
+	//TODO: After opponent color is seleted, find coordinates in screenshot of that color in array
 
 
     }
