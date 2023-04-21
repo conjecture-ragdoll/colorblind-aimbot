@@ -16,7 +16,10 @@ By Flora Afroza
 
 
 int *is_running, *auto_shooting_frequency;
-
+SDL_Window* window;
+SDL_Renderer* renderer;
+SDL_Surface* screenshot;
+SDL_Texture* texture;
     void grab_opponent_color() {
 
     }
@@ -33,7 +36,8 @@ int *is_running, *auto_shooting_frequency;
 		return;
 	}
 
-    	SDL_Window* window = SDL_CreateWindow(
+
+    	window = SDL_CreateWindow(
 				    "_Select Color of Target_", 
 				    SDL_WINDOWPOS_CENTERED, 
 				    SDL_WINDOWPOS_CENTERED, 
@@ -41,11 +45,12 @@ int *is_running, *auto_shooting_frequency;
 				    screen.h, 
 				    SDL_WINDOW_SHOWN);
 
-    	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+    	renderer = SDL_CreateRenderer(window, -1, 0);
+
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 480);
 
 	size_t computer_bits = 8 * sizeof(void*);	// ??? check VM
-
-	SDL_Surface* screenshot = SDL_CreateRGBSurfaceWithFormat(
+	screenshot = SDL_CreateRGBSurfaceWithFormat(
 					0, 
 					screen.w, 
 					screen.h, 
@@ -55,7 +60,7 @@ int *is_running, *auto_shooting_frequency;
 	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGBA32, screenshot->pixels, screenshot->pitch);
 
 	//TODO: After opponent color is seleted, find coordinates in screenshot of that color in array
-
+	
 
     }
 
@@ -84,11 +89,13 @@ int main(int argc, char *argv[]) {
     auto_shooting_frequency = malloc(sizeof(int));
     *auto_shooting_frequency = 0;   // 0 means manual shooting mode
 
+	set_opponent_color();
+
     if(argc > 1) {
         set_shots_per_minute(atoi(argv[1]));
     }
 
-	while(*is_running == 1) {
+	while(*is_running) {
 		
 
 	}
@@ -98,6 +105,14 @@ int main(int argc, char *argv[]) {
 
     free(is_running);
     free(auto_shooting_frequency);
+
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(screenshot);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+
 
     return 0;
 }
