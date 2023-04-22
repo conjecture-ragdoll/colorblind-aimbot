@@ -20,6 +20,7 @@ SDL_Window* window;
 SDL_Renderer* renderer;
 SDL_Surface* screenshot;
 SDL_Texture* texture;
+
     void grab_opponent_color() {
 
     }
@@ -64,6 +65,18 @@ SDL_Texture* texture;
 
     }
 
+
+    void clean_up_time() {
+	    free(is_running);
+	    free(auto_shooting_frequency);
+
+	    SDL_DestroyTexture(texture);
+	    SDL_FreeSurface(screenshot);
+	    SDL_DestroyRenderer(renderer);
+	    SDL_DestroyWindow(window);
+	    SDL_Quit();
+    }
+
     void set_shots_per_minute(int spm) {
 	*auto_shooting_frequency = spm;
     }
@@ -93,6 +106,7 @@ int main(int argc, char *argv[]) {
 
     if(argc > 1) {
         set_shots_per_minute(atoi(argv[1]));
+        printf("%d\n", *auto_shooting_frequency);
     }
 
 	while(*is_running) {
@@ -100,17 +114,9 @@ int main(int argc, char *argv[]) {
 
 	}
 	
+    clean_up_time();
 
-    printf("%d\n", *auto_shooting_frequency);
 
-    free(is_running);
-    free(auto_shooting_frequency);
-
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(screenshot);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 
 
 
