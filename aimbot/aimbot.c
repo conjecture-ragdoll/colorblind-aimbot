@@ -2,17 +2,21 @@
 
 gcc aimbot.c -o aimbot.exe -lSDL2
 
+(Right now designed to compile for UNIX)
+
 Have fun!
-(Currently in progress)
+(Currently in progress, 
+run at your own risk.)
 
 By Flora Afroza
 
 */
 
+// TODO: Set up windows instrutions
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <X11/Xlib.h>
 
 
 int *is_running, *auto_shooting_frequency;
@@ -21,11 +25,11 @@ SDL_Renderer* renderer;
 SDL_Surface* screenshot;
 SDL_Texture* texture;
 
-    void grab_opponent_color() {
+    void grab_opponent_color() {	// User should select coordinates of a pixel of opponent color
 
     }
 
-    void set_opponent_color() {  	// User must make sure colorblind mode is enabled
+    void set_opponent_color(int xpos, int ypos) {  	// User must make sure colorblind mode is enabled
    	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         	printf("SDL Error: %s\n", SDL_GetError());
         	return;
@@ -48,23 +52,27 @@ SDL_Texture* texture;
 
     	renderer = SDL_CreateRenderer(window, -1, 0);
 
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 480);
-
 	size_t computer_bits = 8 * sizeof(void*);	// ??? check VM
-	screenshot = SDL_CreateRGBSurfaceWithFormat(
+	screenshot = SDL_CreateRGBSurface(
 					0, 
 					screen.w, 
 					screen.h, 
 					computer_bits, 
-					SDL_PIXELFORMAT_RGBA32);
+					0,0,0,0);
     	
-	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGBA32, screenshot->pixels, screenshot->pitch);
+	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenshot->pixels, screenshot->pitch);
 
 	//TODO: After opponent color is seleted, find coordinates in screenshot of that color in array
-	
+	Uint8 red, green, blue;
+        Uint32 pixel = ((Uint32*)screenshot->pixels)[ypos * screenshot->w + xpos];
+        SDL_GetRGB(pixel, screenshot->format, &red, &green, &blue);
+
 
     }
 
+    void plots_of_pixelcolor() {
+
+    }
 
     void clean_up_time() {
 	    free(is_running);
@@ -75,6 +83,15 @@ SDL_Texture* texture;
 	    SDL_DestroyRenderer(renderer);
 	    SDL_DestroyWindow(window);
 	    SDL_Quit();
+    }
+
+    void setup_default() {
+	    is_running = malloc(sizeof(int));
+	    *is_running = 1;	// auto-aim enabled
+
+
+	    auto_shooting_frequency = malloc(sizeof(int));
+	    *auto_shooting_frequency = 0;   // 0 means manual shooting mode
     }
 
     void set_shots_per_minute(int spm) {
@@ -93,22 +110,13 @@ SDL_Texture* texture;
 
 int main(int argc, char *argv[]) {
 
-
-    
-    is_running = malloc(sizeof(int));
-    *is_running = 1;	// auto-aim enabled
-
-
-    auto_shooting_frequency = malloc(sizeof(int));
-    *auto_shooting_frequency = 0;   // 0 means manual shooting mode
-
-	set_opponent_color();
+    	setup_default();    
+	set_opponent_color(500,500);	// test
 
     if(argc > 1) {
         set_shots_per_minute(atoi(argv[1]));
         printf("%d\n", *auto_shooting_frequency);
     }
-
 	while(*is_running) {
 		
 
