@@ -23,7 +23,6 @@ int *is_running, *auto_shooting_frequency;
 SDL_Window* window;
 SDL_Renderer* renderer;
 SDL_Surface* screenshot;
-SDL_Texture* texture;
 
     void grab_opponent_color() {	// User should select coordinates of a pixel of opponent color
 
@@ -59,14 +58,16 @@ SDL_Texture* texture;
 					screen.h, 
 					computer_bits, 
 					0,0,0,0);
-    	
+        void *pixels;
+	int pitch;
+// TODO: error at function call below
 	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenshot->pixels, screenshot->pitch);
 
 	//TODO: After opponent color is seleted, find coordinates in screenshot of that color in array
-	Uint8 red, green, blue;
+/*	Uint8 red, green, blue;
         Uint32 pixel = ((Uint32*)screenshot->pixels)[ypos * screenshot->w + xpos];
         SDL_GetRGB(pixel, screenshot->format, &red, &green, &blue);
-
+*/
 
     }
 
@@ -78,11 +79,13 @@ SDL_Texture* texture;
 	    free(is_running);
 	    free(auto_shooting_frequency);
 
-	    SDL_DestroyTexture(texture);
 	    SDL_FreeSurface(screenshot);
-	    SDL_DestroyRenderer(renderer);
 	    SDL_DestroyWindow(window);
+
+	    SDL_DestroyRenderer(renderer);
+/*	   
 	    SDL_Quit();
+	    */
     }
 
     void setup_default() {
@@ -118,7 +121,7 @@ int main(int argc, char *argv[]) {
         printf("%d\n", *auto_shooting_frequency);
     }
 	while(*is_running) {
-		
+		*is_running = 0;		
 
 	}
 	
