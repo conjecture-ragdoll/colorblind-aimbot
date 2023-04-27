@@ -12,20 +12,31 @@ By Flora Afroza
 
 */
 
-// TODO: Set up windows instrutions
+// TODO: Set up windows instructions later
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xlib.h>
+
+#include <X11/Xlib.h> // Unix library
 
 
 int *is_running, *auto_shooting_frequency;
 SDL_Window* window;
 SDL_Renderer* renderer;
 SDL_Surface* screenshot;
+SDL_DisplayMode screen;
+
+struct target_pixel {	// init_x and init_y = coordinates of pixel selected
+	int init_x;
+	int init_y;
+	Uint8 red, green, blue, alpha;
+
+
+} selected_pix;
+
 
     void grab_opponent_color() {	// User should select coordinates of a pixel of opponent color
-
+	
     }
 
     void set_opponent_color(int xpos, int ypos) {  	// User must make sure colorblind mode is enabled
@@ -34,12 +45,12 @@ SDL_Surface* screenshot;
         	return;
         }
 
-	SDL_DisplayMode screen;
 	if (SDL_GetCurrentDisplayMode(0, &screen) != 0) {
 		printf("Could not get display mode! SDL_Error: %s\n", SDL_GetError());
 		return;
 	}
 
+	printf("**Screen dimensions: %dx%d\n" , screen.w, screen.h);
 
     	window = SDL_CreateWindow(
 				    "_Select Color of Target_", 
@@ -49,25 +60,26 @@ SDL_Surface* screenshot;
 				    screen.h, 
 				    SDL_WINDOW_SHOWN);
 
-    	renderer = SDL_CreateRenderer(window, -1, 0);
+    	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	size_t computer_bits = 8 * sizeof(void*);	// ??? check VM
-	screenshot = SDL_CreateRGBSurface(
+	screenshot = SDL_CreateRGBSurfaceWithFormat(
 					0, 
 					screen.w, 
 					screen.h, 
-					computer_bits, 
-					0,0,0,0);
+					32, 
+					SDL_PIXELFORMAT_ARGB8888);
         void *pixels;
 	int pitch;
-// TODO: error at function call below
+
 	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenshot->pixels, screenshot->pitch);
 
 	//TODO: After opponent color is seleted, find coordinates in screenshot of that color in array
-/*	Uint8 red, green, blue;
+	Uint8 red, green, blue, alpha;
         Uint32 pixel = ((Uint32*)screenshot->pixels)[ypos * screenshot->w + xpos];
-        SDL_GetRGB(pixel, screenshot->format, &red, &green, &blue);
-*/
+        SDL_GetRGBA(pixel, screenshot->format, &red, &green, &blue, &alpha);
+	
+	printf("**Pixel at (%d, %d): Red=%d, Green=%d, Blue=%d, Alpha=%d\n", xpos, ypos, red, green, blue, alpha);
+
 
     }
 
@@ -114,14 +126,15 @@ SDL_Surface* screenshot;
 int main(int argc, char *argv[]) {
 
     	setup_default();    
-	set_opponent_color(500,500);	// test
+	set_opponent_color(950,380);	// test
 
     if(argc > 1) {
         set_shots_per_minute(atoi(argv[1]));
-        printf("%d\n", *auto_shooting_frequency);
+        
+	printf("** %d\n", *auto_shooting_frequency);
     }
 	while(*is_running) {
-		*is_running = 0;		
+		toggle_state(*is_running);		
 
 	}
 	
