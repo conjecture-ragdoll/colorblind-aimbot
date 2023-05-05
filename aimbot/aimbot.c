@@ -1,6 +1,6 @@
 /*
 
-gcc aimbot.c -o aimbot.exe
+gcc aimbot.c -o aimbot.exe -lX11
 
 (Right now designed to compile for UNIX)
 
@@ -16,33 +16,28 @@ By Flora Afroza
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <X11/Xlib.h> // Unix library
 
 
 int *is_running, *auto_shooting_frequency;
 
-struct target_pixel {	// init_x and init_y = coordinates of pixel selected
-	int init_x;
-	int init_y;
-	Uint8 red, green, blue, alpha;
-} selected_pix;
+XColor pix_color;
+ 
 
-
-    void grab_opponent_color(int xpos, int ypos, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {	// Input param from selected_pix struct.
-	Uint32 pixel = ((Uint32*)surface->pixels)[ypos * surface->w + xpos];
-	SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);	
-    }
-
-
-// Process color from user selected pixel
     void set_opponent_color() {  	// User must make sure colorblind mode is enabled
+	    Display *display = XOpenDisplay(NULL);
+	    Window root = DefaultRootWindow(display);
 
-
-
-
-
-
+	    XGrabPointer(display, root, False, ButtonPress, GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
+	    XEvent event;
+	    do {
+		XNextEvent(display, &event);
+		if (event.type == ButtonPress) {
+		    XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &pix_color);
+		    break;
+		}
+	    }  while(1);
+	        XCloseDisplay(display);
     }
 
     void clean_up_time() {
@@ -83,7 +78,7 @@ struct target_pixel {	// init_x and init_y = coordinates of pixel selected
 int main(int argc, char *argv[]) {
 
     	setup_default();    
-	set_opponent_color(950,380);	// test
+	set_opponent_color();	// test
 
     if(argc > 1) {
         set_shots_per_minute(atoi(argv[1]));
@@ -94,7 +89,8 @@ int main(int argc, char *argv[]) {
 		toggle_state(is_running);		
 
 	}
-	
+	XQueryColor(display, Colormap, &pix_color);
+	printf("Red: %u, Green: %u, Blue: %u\n", pix_color.red, pix_color.green, pix_color.blue);	
 	clean_up_time();
 
 
