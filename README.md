@@ -1,4 +1,4 @@
-(Currently in Progress)
+﻿(Currently in Progress)
 
 The tool that will make your opponents hate you. It's an aimbot designed as a color-detection tool to help target opponents in first person style shooter games. Users can set instructions via command-line.
 
@@ -6,7 +6,7 @@ The tool that will make your opponents hate you. It's an aimbot designed as a co
 
 Compiling Example:
 
-    gcc aimbot.c -o aimbot.exe -lSDL2
+    gcc aimbot.c -o aimbot.exe -lX11
     ./aimbot 50 
 
 For auto-shooting mode, user may specify an argument to specify shots per minute. Otherwise, user enters manual-mode by default.
