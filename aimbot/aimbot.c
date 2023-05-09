@@ -38,6 +38,7 @@ XColor pix_color;
 		}
 	    }  while(1);
 	        XCloseDisplay(display);
+
     }
 
     void clean_up_time() {
@@ -89,7 +90,6 @@ int main(int argc, char *argv[]) {
 		toggle_state(is_running);		
 
 	}
-	XQueryColor(display, Colormap, &pix_color);
 	printf("Red: %u, Green: %u, Blue: %u\n", pix_color.red, pix_color.green, pix_color.blue);	
 	clean_up_time();
 
