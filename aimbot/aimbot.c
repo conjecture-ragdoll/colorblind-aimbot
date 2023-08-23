@@ -26,18 +26,19 @@ XColor pix_color;
 
     void set_opponent_color() {  	// User must make sure colorblind mode is enabled
 	    Display *display = XOpenDisplay(NULL);
-	    Window root = DefaultRootWindow(display);
+	    if(!display) {
+		fprintf(stderr, "Unable to open display.\n");
+		return 1;
+	    }
 
-	    XGrabPointer(display, root, False, ButtonPress, GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
-	    XEvent event;
-	    do {
-		XNextEvent(display, &event);
-		if (event.type == ButtonPress) {
-		    XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &pix_color);
-		    break;
-		}
-	    }  while(1);
-	        XCloseDisplay(display);
+	    Window selected_win = DefaultRootWindow(display);
+
+            XColor target_color;	
+	    target_color.red = 0;
+	    target_color.green = 0;
+	    target_color.blue = 0;
+
+
 
     }
 
@@ -67,8 +68,14 @@ XColor pix_color;
     }
 
 
-    void target_opponent() {       // cursor functions here
+    void target_opponent() { 
+      	 // cursor functions here
 
+    }
+
+    void shoot_opponent() {
+	// cursor click function from auto_shooting_frequency
+	
     }
 
     void toggle_state(int *state) {
@@ -86,10 +93,10 @@ int main(int argc, char *argv[]) {
         
 	printf("** %d\n", *auto_shooting_frequency);
     }
-	while(*is_running) {
-		toggle_state(is_running);		
+	//while(*is_running) {
+	//	toggle_state(is_running);		
 
-	}
+	//}
 	printf("Red: %u, Green: %u, Blue: %u\n", pix_color.red, pix_color.green, pix_color.blue);	
 	clean_up_time();
 
