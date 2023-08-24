@@ -21,8 +21,41 @@ By Flora Afroza
 
 int *is_running, *auto_shooting_frequency;
 
-XColor pix_color;
+XColor target_color;
  
+
+    void clean_up_time() {
+            free(is_running);
+            free(auto_shooting_frequency);
+    }
+
+    	
+    void take_screenshot() {
+
+    XEvent event;
+    while (1) {
+        XNextEvent(Display, &event);
+
+        if (event.type == MotionNotify) {
+            XImage *screenshot = XGetImage(display, RootWindow, event.xmotion.x, event.xmotion.y, 1, 1, AllPlanes, ZPixmap);
+
+            XColor pixelColor;
+            pixelColor.pixel = XGetPixel(screenshot, 0, 0);
+            XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &pixelColor);
+
+            if (pixelColor.red == target_color.red && pixelColor.green == target_color.green && pixelColor.blue == target_color.blue) {
+             	// cursor functions here
+		    printf("Cursor at (%d, %d) is over the target color.\n", event.xmotion.x, event.xmotion.y);
+            }
+
+            XDestroyImage(screenshot);
+        }
+    }
+
+
+    }
+		
+
 
     void set_opponent_color() {  	// User must make sure colorblind mode is enabled
 	    Display *display = XOpenDisplay(NULL);
@@ -33,24 +66,23 @@ XColor pix_color;
 
 	    Window selected_win = DefaultRootWindow(display);
 
-            XColor target_color;	
 	    target_color.red = 0;
 	    target_color.green = 0;
 	    target_color.blue = 0;
 
-
+	XGrabPointer(display,
+		RootWindow, 
+		False, 
+		PointerMotionMask | ButtonPressMask, 
+		GrabModeAsync, 
+		GrabModeAsync, 
+		None, 
+		None, 
+		CurrentTime);
+	
+	take_screenshot();
 
     }
-
-    void clean_up_time() {
-            free(is_running);
-            free(auto_shooting_frequency);
-    }
-
-    	
-
-		
-
 
 
 
