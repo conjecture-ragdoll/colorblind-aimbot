@@ -31,28 +31,42 @@ XColor target_color;
 
     	
     void take_screenshot() {
+	int flagE = 1;
+	    XEvent event;
+		while (flagE) {
+		XNextEvent(Display, &event);
 
-    XEvent event;
-    while (1) {
-        XNextEvent(Display, &event);
+		if (event.type == MotionNotify) {
+		    XImage *screenshot = XGetImage(display, 
+			    		RootWindow,
+				       	event.xmotion.x, 
+					event.xmotion.y, 
+					1, 
+					1, 
+					AllPlanes, 
+					ZPixmap);
 
-        if (event.type == MotionNotify) {
-            XImage *screenshot = XGetImage(display, RootWindow, event.xmotion.x, event.xmotion.y, 1, 1, AllPlanes, ZPixmap);
+		    XColor pixelColor;
+		    pixelColor.pixel = XGetPixel(screenshot, 0, 0);
+		    XQueryColor(display, DefaultColormap(display, 
+				    	DefaultScreen(display)), 
+			    		&pixelColor);
 
-            XColor pixelColor;
-            pixelColor.pixel = XGetPixel(screenshot, 0, 0);
-            XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &pixelColor);
+		    if (pixelColor.red == target_color.red && pixelColor.green == target_color.green && pixelColor.blue == target_color.blue) {
+			// cursor functions here
+			//
+			//
+			//
+			//
+			
 
-            if (pixelColor.red == target_color.red && pixelColor.green == target_color.green && pixelColor.blue == target_color.blue) {
-             	// cursor functions here
 		    printf("Cursor at (%d, %d) is over the target color.\n", event.xmotion.x, event.xmotion.y);
-            }
+		    }
 
-            XDestroyImage(screenshot);
-        }
-    }
-
-
+		    XDestroyImage(screenshot);
+		    flagE = 0;
+		}
+	    }
     }
 		
 
