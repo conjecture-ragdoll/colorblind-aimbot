@@ -2,6 +2,10 @@
 
 gcc aimbot.c -o aimbot.exe -lX11
 
+use :%!astyle in vim to format
+
+MAKE SURE COLOR BLIND MODE IS ENABLED
+
 (Right now designed to compile for UNIX)
 
 Have fun!
@@ -50,19 +54,23 @@ void take_screenshot() {
             pixelColor.pixel = XGetPixel(screenshot, 0, 0);
             XQueryColor(display, DefaultColormap(display,
                                                  DefaultScreen(display)),
-                        &pixelColor);
+					         &pixelColor);
+		
 
+	    // Assign to global var
+	    target_color = pixelColor;
+	    /*
             if (pixelColor.red == target_color.red && pixelColor.green == target_color.green && pixelColor.blue == target_color.blue) {
                 // cursor functions here
                 //
-                //
+                //	*TEST*
                 //
                 //
 
 
                 printf("Cursor at (%d, %d) is over the target color.\n", event.xmotion.x, event.xmotion.y);
             }
-
+*/
             XDestroyImage(screenshot);
             flagE = 0;
         }
@@ -70,7 +78,7 @@ void take_screenshot() {
 }
 
 
-
+/*
 void set_opponent_color() {  	// User must make sure colorblind mode is enabled
     Display *display = XOpenDisplay(NULL);
     if(!display) {
@@ -97,7 +105,7 @@ void set_opponent_color() {  	// User must make sure colorblind mode is enabled
     take_screenshot();
 
 }
-
+*/
 
 
 void setup_default() {
